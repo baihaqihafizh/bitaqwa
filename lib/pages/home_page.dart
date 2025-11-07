@@ -32,119 +32,57 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: double.infinity,
-                height: 130,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 47, 141, 133),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(),
-                            child: Column(
-                              children: [
-                                Image.asset('assets/images/ic_menu_doa.png'),
-                                Text(
-                                  'Doa & Zikir',
-                                  style: TextStyle(
-                                    fontFamily: 'poppinsRegular',
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(),
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/images/ic_menu_jadwal_sholat.png',
-                                ),
-                                Text(
-                                  'Jadwal Sholat',
-                                  style: TextStyle(
-                                    fontFamily: 'poppinsRegular',
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(),
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/images/ic_menu_video_kajian.png',
-                                ),
-                                Text(
-                                  'Video kajian',
-                                  style: TextStyle(
-                                    fontFamily: 'poppinsRegular',
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(),
-                            child: Column(
-                              children: [
-                                Image.asset('assets/images/ic_menu_zakat.png'),
-                                Text(
-                                  'zakat',
-                                  style: TextStyle(
-                                    fontFamily: 'poppinsRegular',
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // =========================
+            // MENU SECTION
+            // =========================
+            _buidMenuGridSection(),
+            // =========================
+            // CAROUSEL SECTION
+            // =========================
             _buildCarouselSection(),
           ],
         ),
       ),
     );
   }
+  // =========================
+  // MENU ITEM WIDGET
+  // =========================
+  Widget _buidManuItem(
+    String iconPath, 
+    String title, 
+    String routName,
+    ) {
+    return Column(
+      children: [
+        Image.asset(iconPath, width: 35,),
+        Text(title)
+      ],
+    );
+  }
 
+  // =========================
+  // MENU GRID SECTION WIDGET
+  // =========================
+  Widget _buidMenuGridSection() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GridView.count(crossAxisCount: 4, 
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: [
+        _buidManuItem('assets/images/doa.jpg', 'Doa Harian', '/doa'),
+        _buidManuItem('assets/images/doa.jpg', 'Video Kajian', '/doa'),
+        _buidManuItem('assets/images/doa.jpg', 'Jadwal Sholat', '/doa'),
+        _buidManuItem('assets/images/doa.jpg', 'Zahat', '/doa'),
+      ],
+      ),
+    );
+  }
+
+  // =========================
+  // CAROUSEL SECTION WIDGET
+  // =========================
   Widget _buildCarouselSection() {
     return Column(
       children: [
