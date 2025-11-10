@@ -29,51 +29,123 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            // =========================
-            // MENU SECTION
-            // =========================
-            _buidMenuGridSection(),
-            // =========================
-            // CAROUSEL SECTION
-            // =========================
-            _buildCarouselSection(),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              // =========================
+              // MENU WAKTU SHOLAT BY LOKASI
+              // =========================
+              _buildHeroSection(),
+              // =========================
+              // MENU SECTION
+              // =========================
+              _buidMenuGridSection(),
+              // =========================
+              // CAROUSEL SECTION
+              // =========================
+              _buildCarouselSection(),
+            ],
+          ),
         ),
       ),
     );
   }
   // =========================
+  // MENU HERO WIDGET
+  // =========================
+  Widget _buildHeroSection() {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: double.infinity,
+          height: 290,
+          decoration: BoxDecoration(
+            color: Color(0xFFB3E5FC),
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(30),
+              bottomLeft: Radius.circular(30),
+            ),
+          image: DecorationImage(image: AssetImage('assets/images/pagi.jpg'
+          ),
+          fit: BoxFit.cover,
+          ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Assalamu\'alaikum',
+                  style: TextStyle(
+                    fontFamily: 'PoppinsRegular',
+                    color: Colors.white70,
+                    fontSize: 16,
+                  ),
+                ),
+                Text('Ngargoyoso', style: TextStyle(
+                  fontFamily: 'PoppinsSemiBold', 
+                  fontSize: 22,
+                  color: Colors.white,
+                  ),
+                ),
+                Text(
+                  DateFormat('HH:mm')
+                  .format(DateTime.now()),
+                  style: TextStyle(
+                    fontFamily: 'PoppinsBold',
+                    fontSize: 50,
+                    height: 1.2,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // =========================
   // MENU ITEM WIDGET
   // =========================
-  Widget _buidManuItem(
+  Widget _buildMenuItem(
     String iconPath, 
     String title, 
-    String routName,
+    String routeName,
     ) {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            )
-          ]
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(iconPath, width: 35,),
-            const SizedBox(height: 6),
-            Text(title, style: TextStyle(fontFamily: 'PoppinsRegular', fontSize: 13,),)
-          ],
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: (){
+          Navigator.pushNamed(context, routeName);
+        },
+        borderRadius: BorderRadius.circular(12),
+        splashColor: Colors.amber.withOpacity(0.2),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              )
+            ]
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(iconPath, width: 35,),
+              const SizedBox(height: 6),
+              Text(title, style: TextStyle(fontFamily: 'PoppinsRegular', fontSize: 13,),)
+            ],
+          ),
         ),
       ),
     );
@@ -85,14 +157,18 @@ class _HomePageState extends State<HomePage> {
   Widget _buidMenuGridSection() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: GridView.count(crossAxisCount: 4, 
+      child: GridView.count(
+      crossAxisCount: 4, 
       shrinkWrap: true,
+      mainAxisSpacing: 16,
+      crossAxisSpacing: 16,
       physics: const NeverScrollableScrollPhysics(),
       children: [
-        _buidManuItem('assets/images/doa.jpg', 'Doa Harian', '/doa'),
-        _buidManuItem('assets/images/wifimalam.jpg', 'Video Kajian', '/doa'),
-        _buidManuItem('assets/images/sholat.jpg', 'Jadwal Sholat', '/doa'),
-        _buidManuItem('assets/images/calkulator.jpg', 'Zakat', '/doa'),
+        _buildMenuItem('assets/images/doa.jpg', 'Doa', '/doa'),
+        _buildMenuItem('assets/images/sholat.jpg', 'Sholat', '/doa'),
+        _buildMenuItem('assets/images/wifimalam.jpg', 'Kajian', '/doa'),
+        _buildMenuItem('assets/images/calkulator.jpg', 'Zakat', '/doa'),
+        _buildMenuItem('assets/images/sholat.jpg', 'Khutbah', '/doa'),
       ],
       ),
     );
