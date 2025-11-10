@@ -53,11 +53,29 @@ class _HomePageState extends State<HomePage> {
     String title, 
     String routName,
     ) {
-    return Column(
-      children: [
-        Image.asset(iconPath, width: 35,),
-        Text(title)
-      ],
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            )
+          ]
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(iconPath, width: 35,),
+            const SizedBox(height: 6),
+            Text(title, style: TextStyle(fontFamily: 'PoppinsRegular', fontSize: 13,),)
+          ],
+        ),
+      ),
     );
   }
 
@@ -72,9 +90,9 @@ class _HomePageState extends State<HomePage> {
       physics: const NeverScrollableScrollPhysics(),
       children: [
         _buidManuItem('assets/images/doa.jpg', 'Doa Harian', '/doa'),
-        _buidManuItem('assets/images/doa.jpg', 'Video Kajian', '/doa'),
-        _buidManuItem('assets/images/doa.jpg', 'Jadwal Sholat', '/doa'),
-        _buidManuItem('assets/images/doa.jpg', 'Zahat', '/doa'),
+        _buidManuItem('assets/images/wifimalam.jpg', 'Video Kajian', '/doa'),
+        _buidManuItem('assets/images/sholat.jpg', 'Jadwal Sholat', '/doa'),
+        _buidManuItem('assets/images/calkulator.jpg', 'Zakat', '/doa'),
       ],
       ),
     );
