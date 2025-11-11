@@ -20,12 +20,38 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final CarouselController controller = CarouselController();
   int currenIndex = 0;
+  bool _isLoading = true;
+  Duration? _timeRemaining;
+  Timer? _countdownTimer;
+  String _location = "Menggambil Lokasi....";
+  String _prayTime = "Loading";
+  String _backgroundImage = 'assets/images/pagi.jpg';
+  List<dynamic>? _jadwalSholat;
+
+  // Fungsi text remaining waktu sholat
+  String _formatDuration(Duration d) {
+    final hours = d.inHours;
+    final minute = d.inMinutes.remainder(60);
+    return "$hours jam $minute menit lagi";
+  }
 
   final posterList = const <String>[
     'assets/images/ramadhan.jpg',
     'assets/images/idulfitri.jpg',
     'assets/images/iduladha.jpg',
   ];
+  
+    // Fungsi text remaining waktu sholat 
+  String _formatDuration(Duration d) {
+    final hours = d.inHours;
+    final minute = d.inMinutes.remainder(60);
+    return "$hours jam $minute menit lagi";
+  }
+
+  // Untuk Dijalan kan di awal
+  @override
+  
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +63,7 @@ class _HomePageState extends State<HomePage> {
               // MENU WAKTU SHOLAT BY LOKASI
               // =========================
               _buildHeroSection(),
+              const SizedBox(height: 65),
               // =========================
               // MENU SECTION
               // =========================
@@ -51,6 +78,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   // =========================
   // MENU HERO WIDGET
   // =========================
@@ -67,10 +95,10 @@ class _HomePageState extends State<HomePage> {
               bottomRight: Radius.circular(30),
               bottomLeft: Radius.circular(30),
             ),
-          image: DecorationImage(image: AssetImage('assets/images/pagi.jpg'
-          ),
-          fit: BoxFit.cover,
-          ),
+            image: DecorationImage(
+              image: AssetImage('assets/images/siang.jpg'),
+              fit: BoxFit.cover,
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -86,20 +114,78 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 16,
                   ),
                 ),
-                Text('Ngargoyoso', style: TextStyle(
-                  fontFamily: 'PoppinsSemiBold', 
-                  fontSize: 22,
-                  color: Colors.white,
+                Text(
+                  'Ngargoyoso',
+                  style: TextStyle(
+                    fontFamily: 'PoppinsSemiBold',
+                    fontSize: 22,
+                    color: Colors.white,
                   ),
                 ),
                 Text(
-                  DateFormat('HH:mm')
-                  .format(DateTime.now()),
+                  DateFormat('HH:mm').format(DateTime.now()),
                   style: TextStyle(
                     fontFamily: 'PoppinsBold',
                     fontSize: 50,
                     height: 1.2,
                     color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // WAKTU SHOLAT
+        Positioned(
+          bottom: -50,
+          left: 20,
+          right: 20,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 2,
+                  offset: Offset(0, 4),
+                  color: Colors.black.withOpacity(0.4),
+                ),
+              ],
+            ),
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 14),
+            child: Column(
+              children: [
+                Text(
+                  'Waktu Sholat Berikutnya..',
+                  style: TextStyle(
+                    fontFamily: 'PoppinsRegular',
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                ),
+                Text(
+                  'ASHAR',
+                  style: TextStyle(
+                    fontFamily: 'PoppinsRegular',
+                    fontSize: 20,
+                    color: Colors.amber,
+                  ),
+                ),
+                Text(
+                  '14:22',
+                  style: TextStyle(
+                    fontFamily: 'PoppinsRegular',
+                    fontSize: 20,
+                    color: Colors.black38,
+                  ),
+                ),
+                Text(
+                  '5 Jam 10 Menit',
+                  style: TextStyle(
+                    fontFamily: 'PoppinsRegular',
+                    fontSize: 13,
+                    color: Colors.grey,
                   ),
                 ),
               ],
@@ -113,15 +199,11 @@ class _HomePageState extends State<HomePage> {
   // =========================
   // MENU ITEM WIDGET
   // =========================
-  Widget _buildMenuItem(
-    String iconPath, 
-    String title, 
-    String routeName,
-    ) {
+  Widget _buildMenuItem(String iconPath, String title, String routeName) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: (){
+        onTap: () {
           Navigator.pushNamed(context, routeName);
         },
         borderRadius: BorderRadius.circular(12),
@@ -135,15 +217,18 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.black.withOpacity(0.05),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
-              )
-            ]
+              ),
+            ],
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(iconPath, width: 35,),
+              Image.asset(iconPath, width: 35),
               const SizedBox(height: 6),
-              Text(title, style: TextStyle(fontFamily: 'PoppinsRegular', fontSize: 13,),)
+              Text(
+                title,
+                style: TextStyle(fontFamily: 'PoppinsRegular', fontSize: 13),
+              ),
             ],
           ),
         ),
@@ -158,20 +243,30 @@ class _HomePageState extends State<HomePage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GridView.count(
-      crossAxisCount: 4, 
-      shrinkWrap: true,
-      mainAxisSpacing: 16,
-      crossAxisSpacing: 16,
-      physics: const NeverScrollableScrollPhysics(),
-      children: [
-        _buildMenuItem('assets/images/doa.jpg', 'Doa', '/doa'),
-        _buildMenuItem('assets/images/sholat.jpg', 'Sholat', '/doa'),
-        _buildMenuItem('assets/images/wifimalam.jpg', 'Kajian', '/doa'),
-        _buildMenuItem('assets/images/calkulator.jpg', 'Zakat', '/doa'),
-        _buildMenuItem('assets/images/sholat.jpg', 'Khutbah', '/doa'),
-      ],
+        crossAxisCount: 4,
+        shrinkWrap: true,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          _buildMenuItem('assets/images/doa.jpg', 'Doa', '/doa'),
+          _buildMenuItem('assets/images/sholat.jpg', 'Sholat', '/doa'),
+          _buildMenuItem('assets/images/wifimalam.jpg', 'Kajian', '/doa'),
+          _buildMenuItem('assets/images/calkulator.jpg', 'Zakat', '/doa'),
+          _buildMenuItem('assets/images/sholat.jpg', 'Khutbah', '/doa'),
+        ],
       ),
     );
+  }
+
+  Future _getBackgroundImage(DateTime now) async {
+    if (now.hour < 12) {
+      return 'assets/images/pagi.jpg';
+    } else if (now.hour < 18) {
+      return 'assets/images/siang.jpg';
+    }
+
+    return 'assets/images/malam.jpg';
   }
 
   // =========================
